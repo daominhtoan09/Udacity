@@ -1,0 +1,2 @@
+- Cloudfront endpoint: https://d1excvw3lpouhq.cloudfront.net/
+- S3 endpoint: http://udacity.toandm9.s3-website-us-east-1.amazonaws.com
