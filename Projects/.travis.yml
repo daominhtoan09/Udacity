@@ -1,20 +1,19 @@
-sudo: required
-services:
-  - docker
-before_install:
-## Tagging
-  - docker build  -t udagram-api-feed ./Lession3/udagram-api-feed
+## Build
+  - docker build -t udagram-api-feed ./Lession3/udagram-api-feed
   - docker build  -t udagram-api-user ./Lession3/udagram-api-user
   - docker build  -t udagram-frontend ./Lession3/udagram-frontend
   - docker build  -t udagram-reverseproxy ./Lession3/udagram-reverseproxy
+## Tagging
+  - docker tag udagram-api-feed toandm9/udagram-api-feed:v1
+  - docker tag udagram-api-user toandm9/udagram-api-user:v1
+  - docker tag udagram-frontend toandm9/udagram-frontend:v1
+  - docker tag udagram-reverseproxy toandm9/udagram-reverseproxy:v1
 ## Do similar for other three images```
-
-after_success:
 ## Push
 ## Assuming DOCKER_PASSWORD and DOCKER_USERNAME are set in the Travis repository settings
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push udagram-api-feed
-  - docker push udagram-api-user
-  - docker push udagram-frontend
-  - docker push udagram-reverseproxy
+  - docker push udagram-api-feed:v1
+  - docker push udagram-api-user:v1
+  - docker push udagram-frontend:v1
+  - docker push udagram-reverseproxy:v1
 ## Do similar for other three images
