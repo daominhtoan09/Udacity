@@ -17,3 +17,4 @@
   - docker push udagram-frontend:v1
   - docker push udagram-reverseproxy:v1
 ## Do similar for other three images
+## test
