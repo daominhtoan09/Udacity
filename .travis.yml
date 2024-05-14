@@ -1,3 +1,8 @@
+sudo: required
+services:
+  - docker
+
+before_install:
 ## Build
   - docker build -t udagram-api-feed ./Projects/Lession3/udagram-api-feed
   - docker build  -t udagram-api-user ./Projects/Lession3/udagram-api-user
@@ -11,6 +16,7 @@
 ## Do similar for other three images```
 ## Push
 ## Assuming DOCKER_PASSWORD and DOCKER_USERNAME are set in the Travis repository settings
+after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push udagram-api-feed:v1
   - docker push udagram-api-user:v1
