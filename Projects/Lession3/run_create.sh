@@ -2,6 +2,7 @@
 #aws sts get-caller-identity
 
 #aws eks update-kubeconfig --region us-east-1 --name eks-toandm9
+kubectl delete deployments --all
 kubectl delete pods --all
 kubectl delete service publicfrontend
 kubectl delete service publicreverseproxy
