@@ -1,3 +1,9 @@
+language: node_js
+node_js:
+  - 16
+services:
+  - docker
+script:
 ## Build
   - docker build -t udagram-api-feed ./Projects/Lession3/udagram-api-feed
   - docker build  -t udagram-api-user ./Projects/Lession3/udagram-api-user
@@ -8,6 +14,7 @@
   - docker tag udagram-api-user toandm9/udagram-api-user:v1
   - docker tag udagram-frontend toandm9/udagram-frontend:v1
   - docker tag udagram-reverseproxy toandm9/udagram-reverseproxy:v1
+after_script:
 ## Do similar for other three images```
 ## Push
 ## Assuming DOCKER_PASSWORD and DOCKER_USERNAME are set in the Travis repository settings
