@@ -19,8 +19,3 @@ spec:
         image: daominhtoan09/udagram-reverseproxy:v1
         ports:
         - containerPort: 8080
-        envFrom:
-          - configMapRef:
-              name: config-env-value
-          - secretRef:
-              name: secret-env-value
