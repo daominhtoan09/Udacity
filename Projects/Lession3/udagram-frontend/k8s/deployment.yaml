@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: udagram-frontend
-        image: daominhtoan09/udagram-frontend:v1
+        image: daominhtoan09/udagram-frontend:v2.18
         ports:
         - containerPort: 8080
         envFrom:

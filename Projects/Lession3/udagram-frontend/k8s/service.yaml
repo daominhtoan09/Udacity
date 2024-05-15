@@ -5,8 +5,10 @@ metadata:
   labels:
     run: udagram-frontend
 spec:
-  ports:
-  - port: 8100
-    protocol: TCP
   selector:
-    run: udagram-frontend
+    app: udagram-frontend
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
