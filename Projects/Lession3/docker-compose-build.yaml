@@ -4,16 +4,28 @@ services:
     build:
       context: ./udagram-api-user
     image: udagram-api-user
+    extra_hosts: 
+      - host.docker.internal:host-gateway
+    environment:
+      POSTGRES_USERNAME: $POSTGRES_USERNAME
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD 
+      POSTGRES_DB: $POSTGRES_DB 
+      POSTGRES_HOST: $POSTGRES_HOST
+      AWS_REGION: $AWS_REGION 
+      AWS_PROFILE: $AWS_PROFILE 
+      AWS_BUCKET: $AWS_BUCKET
+      JWT_SECRET: $JWT_SECRET
+      URL: "http://localhost:8100"
   backend_feed:
     build:
       context: ./udagram-api-feed
     image: udagram-api-feed
+    extra_hosts: 
+      - host.docker.internal:host-gateway
   frontend:
     build:
       context: ./udagram-frontend
     image: udagram-frontend:local
-    ports:
-      - 8100:80
   reverseproxy:
     build:
       context: ./udagram-reverseproxy
@@ -21,6 +33,4 @@ services:
     depends_on:
       - backend_user
       - backend_feed
-    ports:
-      - 8080:8080
   

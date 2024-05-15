@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udagram-reverseproxy
+  labels:
+    app: udagram-reverseproxy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: udagram-reverseproxy
+  template:
+    metadata:
+      labels:
+        app: udagram-reverseproxy
+    spec:
+      containers:
+      - name: udagram-reverseproxy
+        image: daominhtoan09/udagram-reverseproxy:v1
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: config-env-value
+          - secretRef:
+              name: secret-env-value
