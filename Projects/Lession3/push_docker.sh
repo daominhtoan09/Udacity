@@ -18,5 +18,5 @@ docker push daominhtoan09/udagram-frontend:"$version"
 docker push daominhtoan09/udagram-reverseproxy:"$version"
 
 
-docker tag udagram-frontend daominhtoan09/udagram-frontend:v2.22
-docker push daominhtoan09/udagram-frontend:v2.22
+docker tag udagram-frontend daominhtoan09/udagram-frontend:v2.18
+docker push daominhtoan09/udagram-frontend:v2.18
