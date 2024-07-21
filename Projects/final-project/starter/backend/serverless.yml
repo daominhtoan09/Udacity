@@ -1,0 +1,165 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+AWSTemplateFormatVersion: "2010-09-09"
+org: toandm9
+service: serverless-todo-app
+
+plugins:
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: 'dev'
+  region: 'us-east-1'
+  timeout: 30
+  environment:
+      TODOS_TABLE: Todos-dev
+      TODOS_CREATED_AT_INDEX: CreatedAtIndex
+
+functions:
+
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
+
+  # TODO: Configure this function
+  GetTodos:
+    handler: src/lambda/http/getTodos.handler    
+    events:
+      - http:
+          method: get
+          path: todos
+          cors: true
+          authorizer:
+            name: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:*"
+        Resource: "*"
+
+  # TODO: Configure this function
+  CreateTodo:
+    handler: src/lambda/http/createTodo.handler
+    events:
+      - http:
+          method: post
+          path: todos
+          cors: true
+          authorizer:
+            name: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:*"
+        Resource: "*"
+
+  # TODO: Configure this function
+  UpdateTodo:
+    handler: src/lambda/http/updateTodo.handler
+    iamRoleStatements:
+     - Effect: Allow
+       Action: "dynamodb:*"
+       Resource: "*"
+    events:
+      - http:
+          method: patch
+          path: todos/{todoId}
+          cors: true
+          authorizer:
+            name: Auth
+
+  # TODO: Configure this function
+  DeleteTodo:
+    handler: src/lambda/http/deleteTodo.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:*"
+        Resource: "*"
+    events:
+      - http:
+          method: delete
+          path: todos/{todoId}
+          cors: true
+          authorizer:
+            name: Auth
+
+  # TODO: Configure this function
+  GenerateUploadUrl:
+    handler: src/lambda/http/generateUploadUrl.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:*"
+        Resource: "*"
+      - Sid: AllowPublicReadAndWrite
+        Effect: Allow
+        Action: 
+          - "s3:GetObject"
+          - "s3:PutObject"
+        Resource: '*'
+    events:
+      - http:
+          method: post
+          path: todos/{todoId}/attachment
+          cors: true
+          authorizer:
+            name: Auth
+
+resources:
+  Resources:
+    TodosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: todoId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: todoId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.TODOS_TABLE}
+
+    S3Bucket: 
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: toandm9
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
+              AllowedMethods:
+                - GET
+                - POST
+                - PUT
+              MaxAge: 3000
+       
+        # Granting public access to bucket
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
+    S3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3Bucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement: 
+            - Sid: AllowPublicReadAccess
+              Effect: Allow
+              Action: 
+                - "s3:GetObject"
+                - "s3:PutObject"
+              Resource: 
+                - !Join ['/', [!GetAtt [S3Bucket, Arn], '*']]
+              Principal: "*"    
+              Condition:
+                Bool:
+                  aws:SecureTransport: 'true'
+          
+ 
+    # TODO: Add any necessary AWS resources
