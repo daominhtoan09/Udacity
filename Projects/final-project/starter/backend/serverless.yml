@@ -5,6 +5,7 @@ service: serverless-todo-app
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-plugin-tracing
 
 provider:
   name: aws
@@ -12,6 +13,9 @@ provider:
   stage: 'dev'
   region: 'us-east-1'
   timeout: 30
+  tracing:
+    lambda: true
+    apiGateway: true
   environment:
       TODOS_TABLE: Todos-dev
       TODOS_CREATED_AT_INDEX: CreatedAtIndex
@@ -20,6 +24,14 @@ functions:
 
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
+    tracing: 'true'
+    iamRoleStatements:
+    - Effect: "Allow" # xray permissions (required) 
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
 
   # TODO: Configure this function
   GetTodos:
@@ -35,10 +47,17 @@ functions:
       - Effect: Allow
         Action: "dynamodb:*"
         Resource: "*"
+      - Effect: "Allow" # xray permissions (required) 
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
+    tracing: 'true'
     events:
       - http:
           method: post
@@ -50,6 +69,12 @@ functions:
       - Effect: Allow
         Action: "dynamodb:*"
         Resource: "*"
+      - Effect: "Allow" # xray permissions (required) 
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   UpdateTodo:

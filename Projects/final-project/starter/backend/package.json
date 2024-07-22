@@ -26,6 +26,7 @@
     "winston": "^3.13.1"
   },
   "devDependencies": {
-    "serverless-iam-roles-per-function": "^3.2.0"
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-plugin-tracing": "^2.0.0"
   }
 }

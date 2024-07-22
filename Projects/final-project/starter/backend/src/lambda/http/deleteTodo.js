@@ -2,7 +2,7 @@
 import { deleteTodo } from '../database/databaseHandler.mjs'
 import {getUserId} from '../utils.mjs'
 export async function handler(event) {
-  console.log("Delete todo: ", event.pathParameters);
+  console.log("Delete todo: ", event);
   const todoId = event.pathParameters.todoId;
   const userId = getUserId(event);
   // TODO: Remove a TODO item by id

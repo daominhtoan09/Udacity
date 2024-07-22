@@ -2,6 +2,7 @@ import {getAllTodos} from '../database/databaseHandler.mjs'
 import {getUserId} from '../utils.mjs'
 export async function handler(event) {
   // TODO: Get all TODO items for a current user
+  console.log(event);
   const userId = getUserId(event);
   console.log('Get todo');
   const result = await getAllTodos(userId);

@@ -4,7 +4,7 @@ import { getUserId } from '../utils.mjs'
 import {udpateTodoUrl} from '../database/databaseHandler.mjs'
 export async function handler(event) {
   try {
-    console.log("Start generate");
+    console.log("Start generate", event);
     const todoId = event.pathParameters.todoId
     const s3Client = new S3Client({ region: "us-east-1" });
     const userId = getUserId(event);

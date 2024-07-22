@@ -1,6 +1,7 @@
 import { udpateTodo } from '../database/databaseHandler.mjs'
 import {getUserId} from '../utils.mjs'
 export async function handler(event) {
+  console.log(event);
   const todoId = event.pathParameters.todoId;
   const updatedTodoData = JSON.parse(event.body);
   const userId = getUserId(event);

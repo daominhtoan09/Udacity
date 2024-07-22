@@ -2,7 +2,7 @@ import { createTodo } from '../database/databaseHandler.mjs'
 import {getUserId} from '../utils.mjs'
 
 export async function handler(event) {
-  console.log(event?.body);
+  console.log(event);
   const newTodo = event.body;
   const userId = getUserId(event);
   console.log(userId);
